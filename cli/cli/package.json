@@ -1,13 +1,13 @@
 {
   "name": "caramel-cli",
   "bin": {
-    "caramel": "./index.js"
+    "caramel": "./dist/index.js"
   },
   "version": "0.0.1",
   "description": "Caramel CLI is a dev-tool for deploying smart contracts to multiple platforms.",
   "main": "index.js",
   "scripts": {
-    "link-cli": "(npm unlink caramel-cli || true) && chmod +x ./index.js && npm link",
+    "link-cli": "(npm unlink caramel-cli || true) && chmod +x ./dist/index.js && npm link",
     "dev": "tsc -w"
   },
   "author": "",
