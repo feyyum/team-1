@@ -1,10 +1,11 @@
 /* eslint-disable react/prop-types */
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 
 function ProtectedRoute({ children }) {
   const navigate = useNavigate();
+  const location = useLocation();
   const auth = getAuth();
 
   const [user, setUser] = useState(undefined);
@@ -24,7 +25,11 @@ function ProtectedRoute({ children }) {
 
   useEffect(() => {
     if (user === null) {
-      navigate("/auth");
+      navigate("/auth", {
+        state: {
+          from: location.pathname,
+        },
+      });
     }
   }, [user]);
 

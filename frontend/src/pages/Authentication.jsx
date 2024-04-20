@@ -1,34 +1,19 @@
-import { useState } from "react";
+import { useContext } from "react";
 import { v4 as uuidv4 } from "uuid";
-import {
-  getAuth,
-  signInWithPopup,
-  GoogleAuthProvider,
-  onAuthStateChanged,
-} from "firebase/auth";
+import { getAuth, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
 import { doc, getDoc, setDoc } from "firebase/firestore";
+import { useLocation, useNavigate } from "react-router-dom";
 
 import { db } from "../../firebase";
+import { AuthContext } from "../App";
 
 function Authentication() {
+  const navigate = useNavigate();
+  const location = useLocation();
   const auth = getAuth();
   const provider = new GoogleAuthProvider();
 
-  const [user, setUser] = useState(undefined);
-
-  onAuthStateChanged(auth, (user) => {
-    if (user) {
-      // User is signed in, see docs for a list of available properties
-      // https://firebase.google.com/docs/reference/js/auth.user
-      setUser(user);
-      console.log(user);
-      // ...
-    } else {
-      // User is signed out
-      // ...
-      setUser(null);
-    }
-  });
+  const user = useContext(AuthContext);
 
   return (
     <div>
@@ -36,7 +21,7 @@ function Authentication() {
       <button
         type="button"
         onClick={() => {
-          if (auth.currentUser) {
+          if (user) {
             // Sign out the user
             auth.signOut();
             return;
@@ -51,7 +36,7 @@ function Authentication() {
               // IdP data available using getAdditionalUserInfo(result)
               // ...
               // console.log(user);
-              const docRef = doc(db, "cities", "SF");
+              const docRef = doc(db, "users", "SF");
 
               try {
                 const docSnap = await getDoc(docRef);
@@ -79,6 +64,8 @@ function Authentication() {
                 console.error("Error getting document:", e);
                 auth.signOut();
               }
+
+              location.state?.from && navigate(location.state?.from);
             })
             .catch((error) => {
               // Handle Errors here.
