@@ -1,8 +1,9 @@
 import { initializeApp } from 'firebase/app';
-import { doc, getDoc, setDoc, query, collection, where, getDocs } from 'firebase/firestore';
+import { doc, getDoc, setDoc, query, collection, where, getDocs, DocumentSnapshot, DocumentReference } from 'firebase/firestore';
 import path from 'path';
 import { readFile } from 'fs/promises';
 import { db } from "../firebase.js";
+
 
 import { fileURLToPath } from 'url';
 import { dirname } from 'path';
@@ -21,29 +22,49 @@ const userAPI = user.API_KEY;
 
 export const sendDatabase = async () => {
     const collectionRef = collection(db, "users");
-    const q = query(collectionRef, where("apiKey", "==", userAPI))
+    try {
+        const q = query(collectionRef, where("apiKey", "==", userAPI));
+        const snapshot = await getDocs(q);
+        let isUser = false;
+        if (!snapshot.empty) {
+            for (const _doc of snapshot.docs) {
 
-    const snapshot = await getDocs(q);
-    let isUser = false;
-    var userReference: any;
-    snapshot.forEach(async (doc) => {
+                const userData = _doc.data();
+                if (isUser) {
+                    throw new Error("This API key is already in use!");
+                } else {
+                    isUser = true;
+                    let userID = _doc.id;
+                    let activeDeploymentsList = [];
+                    for (const nw of user.selectedNetworks) {
+                        let networkObject = { networkName: nw, status: "prepared" };
+                        activeDeploymentsList.push(networkObject);
+                    }
 
-        const userData = doc.data();
-        if (userData.apiKey === userAPI) {
-            if (isUser) {
-                throw error("This API key is already in use!");
-            } else {
-                isUser = true;
-                userReference = doc.ref
-            }
+                    const userReference = doc(db, "users", userID);
 
+                    await setDoc(userReference, {
+                        fileName: user.fileName,
+                        selectedNetworks: user.selectedNetworks,
+                        status: "prepared",
+                        activeDeployments: activeDeploymentsList,
+                        previousDeployments: []
+                    }, { merge: true });
+                }
+            };
+        } else {
+            throw new Error("Document not found!");
         }
-    });
 
-    setDoc(userReference, {
-        user,
-        "status": "prepared"
-    })
+        return
+    } catch (err) {
+        console.log("A problem occured:", err);
+    }
+
+
+
+
+
 
 
 }

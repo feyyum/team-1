@@ -66,7 +66,7 @@ program.command("sendDatabase")
     sendDatabase().then(() => {
       console.log("You have registered to database successfully.");
 
-    });
+    }).catch(() => { console.log("Please check your API Key and write it again.") });
   })
 
 
