@@ -1,6 +1,13 @@
 import { writeFile } from 'fs';
 import { readFile } from 'fs/promises';
 import checkbox, { Separator } from '@inquirer/checkbox';
+import path from 'path';
+import { fileURLToPath } from 'url';
+import { dirname } from 'path';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+
 export const selectNetwork = async () => {
     const networks = await checkbox({
         message: 'Select all the networks you want to deploy contract:',
@@ -12,7 +19,7 @@ export const selectNetwork = async () => {
         ],
         required: true
     });
-    const filePath = '/home/mbo/caramelcli/team-1/cli/caramelconfig.json';
+    let filePath = path.join((__dirname as any).split('cli')[0], "clicaramel/team-1/cli", 'user-info.json');
     const data = await readFile(filePath, 'utf8');
     const user = JSON.parse(data);
     user.selectedNetworks = networks;
@@ -25,6 +32,3 @@ export const selectNetwork = async () => {
 
 
 
-//hangi ağlarda deply edileceği bilgisini alacak
-// buna göre switch-case ?? yapabilir
-//sonra zaten dosyaya yazmaca

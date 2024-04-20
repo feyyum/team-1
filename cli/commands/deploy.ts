@@ -13,10 +13,10 @@ export const isRegistered = async () => {
 
     try {
         // Get current directory
-        let filePath = path.join((__dirname as any).split('cli')[0], "cli", 'user-info.json');
-        console.log(filePath);
-        // let filePath = '/home/mbo/caramelcli/team-1/cli/user-info.json';
-          
+        let filePath = path.join((__dirname as any).split('clicaramel')[0], "cli", 'user-info.json');
+
+
+
         const data = await readFile(filePath, 'utf8');
         const user = JSON.parse(data);
 

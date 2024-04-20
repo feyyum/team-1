@@ -5,6 +5,8 @@ import { authanticate } from './commands/authanticate.js';
 import { selectNetwork } from './commands/select.js';
 import { getPK } from './commands/getPK.js';
 import { getFileName } from './commands/getFile.js';
+import { sendDatabase } from './commands/initiateDatabase.js';
+import "./firebase.js";
 const program = new Command();
 
 program
@@ -32,7 +34,7 @@ program.command('authanticate')
   .argument("<string>", "username")
   .argument("<string>", "password")
   .argument("<string>", "API_KEY")
-  .action((username: string, password: string, API_KEY: string) => { authanticate(username, password, API_KEY).then(() => { console.log("Enter source code file name:") }) });
+  .action((username: string, password: string, API_KEY: string) => { authanticate(username, password, API_KEY).then(() => { console.log("Type caramel fileName <FILE_NAME>") }) });
 
 program.command('networks')
   .description('Choose the networks for deployment')
@@ -53,8 +55,20 @@ program.command('fileName')
   .description('Input the name of the file to be deployed')
   .argument("<string>", "file name")
   .action((name: string) => getFileName(name).
-    then(() => { })
+    then(() => {
+      console.log("You are ready to send info to database");
+      console.log("type caramel sendDatabase");
+    })
   );
+program.command("sendDatabase")
+  .description("Creates new deploy object on database")
+  .action(() => {
+    sendDatabase().then(() => {
+      console.log("You have registered to database successfully.");
+
+    });
+  })
+
 
 
 
