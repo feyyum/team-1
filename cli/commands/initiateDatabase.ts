@@ -6,6 +6,7 @@ import { db } from "../firebase.js";
 
 import { fileURLToPath } from 'url';
 import { dirname } from 'path';
+import { error } from 'console';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -24,17 +25,25 @@ export const sendDatabase = async () => {
 
     const snapshot = await getDocs(q);
     let isUser = false;
+    var userReference: any;
     snapshot.forEach(async (doc) => {
 
         const userData = doc.data();
         if (userData.apiKey === userAPI) {
-            isUser = true;
-            await setDoc(doc.ref, user);
-        }
-        console.log(userData)
+            if (isUser) {
+                throw error("This API key is already in use!");
+            } else {
+                isUser = true;
+                userReference = doc.ref
+            }
 
+        }
     });
 
+    setDoc(userReference, {
+        user,
+        "status": "prepared"
+    })
 
 
 }
