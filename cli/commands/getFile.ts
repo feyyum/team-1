@@ -8,8 +8,8 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
 export const getFileName = async (fileName: string) => {
-    let filePath = path.join((__dirname as any).split('clicaramel')[0], "clicaramel/team-1/cli", fileName);
-    let userFilePath = path.join((__dirname as any).split('clicaramel')[0], "clicaramel/team-1/cli", "user-info.json");
+    let filePath = path.join((__dirname as any).split('cli')[0], "cli", fileName);
+    let userFilePath = path.join((__dirname as any).split('cli')[0], "cli", "user-info.json");
     try {
         const isReady = await readFile(filePath);
         console.log("Your file is in the correct folder. You can continue");

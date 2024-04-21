@@ -14,7 +14,7 @@ const __dirname = dirname(__filename);
 
 
 
-let filePath = path.join((__dirname as any).split('cli')[0], "clicaramel/team-1/cli", 'user-info.json');
+let filePath = path.join((__dirname as any).split('cli')[0], "cli", 'user-info.json');
 const data = await readFile(filePath, 'utf8');
 const user = JSON.parse(data);
 const userAPI = user.API_KEY;

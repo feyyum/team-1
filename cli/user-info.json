@@ -1,10 +1,1 @@
-{
-    "username": "mbo",
-    "password": "ssdsd",
-    "API_KEY": "cebdb3bb-af63-41e3-8227-d4e236fedbcd",
-    "selectedNetworks": [
-        "arbitrum",
-        "solana"
-    ],
-    "fileName": "ornek.ts"
-}
+{"API_KEY":"b618ce06-a84b-4cc2-8a0a-51a935eaa2ed"}
